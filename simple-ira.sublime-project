@@ -1,0 +1,15 @@
+{
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	],
+	"build_systems": [
+		{
+			"name": "Scratch",
+			"working_dir": "$project_path",
+			"shell_cmd": "php scratch/index.php"
+		}
+	]
+}
