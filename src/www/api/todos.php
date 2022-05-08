@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
 include("{$_SERVER['DOCUMENT_ROOT']}/../Status.php");
+include("{$_SERVER['DOCUMENT_ROOT']}/../Url.php");
 
 $db = new SQLite3("{$_SERVER['DOCUMENT_ROOT']}/../../database.db");
 $statement = $db->prepare('
@@ -16,22 +17,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $executed = false;
 
     if (!$status->isValid()) {
-        [
-            'scheme' => $scheme,
-            'query' => $query,
-            'host' => $host,
-            'port' => $port,
-            'path' => $path,
-        ] = parse_url($_SERVER['HTTP_REFERER']);
+        $url = new Url($_SERVER['HTTP_REFERER']);
 
-        parse_str($query, $output);
-        $output['updated'] = 'failed';
-        $output['reason'] = 'invalid status: ' . $status->rawString;
+        $url->updateQuery('updated', 'failed');
+        $url->updateQuery('reason', 'invalid status: ' . $status->rawString);
 
-        $query = http_build_query($output);
-
-        $url = "{$scheme}://{$host}:{$port}{$path}?{$query}";
-        header("Location: $url");
+        header("Location: {$url->toString()}");
         exit;
     }
 
@@ -41,25 +32,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $executed = $statement->execute();
 
-    [
-        'scheme' => $scheme,
-        'query' => $query,
-        'host' => $host,
-        'port' => $port,
-        'path' => $path,
-    ] = parse_url($_SERVER['HTTP_REFERER']);
+    $url = new Url($_SERVER['HTTP_REFERER']);
 
-    parse_str($query ?? '', $output);
-    $output['updated'] = $id;
+    $url->updateQuery('updated', $id);
 
     if (!$executed) {
-        $output['updated'] = 'failed';
-        $output['reason'] = 'db statement failed to execute';
+        $url->updateQuery('updated', 'failed');
+        $url->updateQuery('reason', 'db statement failed to execute');
     }
 
-
-    $query = http_build_query($output);
-
-    $url = "{$scheme}://{$host}:{$port}{$path}?{$query}";
-    header("Location: $url");
+    header("Location: {$url->toString()}");
 }

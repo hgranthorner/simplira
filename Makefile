@@ -5,7 +5,7 @@ scratch:
 	php scratch/scratch.php
 
 test:
-	./vendor/bin/phpunit
+	./vendor/bin/phpunit tests
 
 install:
 	composer install && composer dump-autoload
