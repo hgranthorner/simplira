@@ -1,4 +1,6 @@
 {
+    "name": "hgranthorner/simplira",
+    "description": "a simpler jira",
     "autoload": {
         "classmap": [
             "src/"
@@ -6,5 +8,6 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9"
-    }
+    },
+    "license": "MIT"
 }
