@@ -43,10 +43,16 @@ while ($row = $results->fetchArray()) {
         <label for=$statusLabel>status: </label>
         <select name=$statusLabel>"
     . implode("", array_map($renderStatusOption, Status::$statuses)) . 
-    '   </select>
+    "   </select>
       </li>
     </ul>
-    <button type="submit">Update</button>
-  </form>';
+    <button type=\"submit\">Update</button>
+    <button 
+      class=\"delete-btn\"
+      data-id=\"$id\"
+    >
+      Delete
+    </button>
+  </form>";
 }
 ?>
