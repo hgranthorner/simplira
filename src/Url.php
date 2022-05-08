@@ -10,7 +10,7 @@ class Url
 	public array $query = [];
 
 	function __construct(string $url) {
-		[
+		@[
 			'scheme' => $this->scheme,
 			'query' => $this->queryString,
 			'host' => $this->host,
