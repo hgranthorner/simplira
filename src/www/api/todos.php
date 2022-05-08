@@ -1,6 +1,6 @@
 <?php
 $statuses = ["to_do", "in_progress", "done"];
-$db = new SQLite3("{$_SERVER['DOCUMENT_ROOT']}/../database.db");
+$db = new SQLite3("{$_SERVER['DOCUMENT_ROOT']}/../../database.db");
 $statement = $db->prepare('
 update tickets
 set name = :name,

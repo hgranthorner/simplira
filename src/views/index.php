@@ -1,6 +1,3 @@
-<script>
-  0
-</script>
 <h1>Simplira</h1>
 <?php
 if ($updated_id = $_GET['updated'] ?? false) {
@@ -12,10 +9,11 @@ if ($updated_id = $_GET['updated'] ?? false) {
 }
 ?>
 <h2>Tickets</h2>
+<a href="/add-ticket.php">Add ticket</a>
 <?php
 $statuses = ["to_do", "in_progress", "done"];
 
-$db = new SQLite3("{$_SERVER['DOCUMENT_ROOT']}/../database.db");
+$db = new SQLite3("{$_SERVER['DOCUMENT_ROOT']}/../../database.db");
 $results = $db->query('select id, name, status from tickets;');
 
 while ($row = $results->fetchArray()) {
@@ -41,12 +39,12 @@ while ($row = $results->fetchArray()) {
               <select name=$statusLabel>
               " .
     implode("", array_map($renderStatusOption, $statuses))
-    . "
+    . '
               </select>
             </li>
           </ul>
-          <button type=\"submit\">Update</button>
+          <button type="submit">Update</button>
         </form>
-        ";
+        ';
 }
 ?>
