@@ -1,5 +1,6 @@
-<?php
-$statuses = ["to_do", "in_progress", "done"];
+<?php declare(strict_types=1);
+include("{$_SERVER['DOCUMENT_ROOT']}/../Status.php");
+
 $db = new SQLite3("{$_SERVER['DOCUMENT_ROOT']}/../../database.db");
 $statement = $db->prepare('
 update tickets
@@ -11,10 +12,10 @@ where id = :id
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id     = $_REQUEST['id'];
     $name   = $_REQUEST["$id-name"];
-    $status = $_REQUEST["$id-status"];
+    $status = new Status($_REQUEST["$id-status"]);
     $executed = false;
 
-    if (!is_int(array_search($status, $statuses))) {
+    if (!$status->isValid()) {
         [
             'scheme' => $scheme,
             'query' => $query,
@@ -25,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         parse_str($query, $output);
         $output['updated'] = 'failed';
-        $output['reason'] = 'invalid_status';
+        $output['reason'] = 'invalid status: ' . $status->rawString;
 
         $query = http_build_query($output);
 
@@ -35,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $statement->bindValue(':name', $name);
-    $statement->bindValue(':status', $status);
+    $statement->bindValue(':status', $status->rawString);
     $statement->bindValue(':id', $id);
 
     $executed = $statement->execute();
@@ -48,12 +49,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'path' => $path,
     ] = parse_url($_SERVER['HTTP_REFERER']);
 
-    parse_str($query, $output);
+    parse_str($query ?? '', $output);
     $output['updated'] = $id;
 
     if (!$executed) {
         $output['updated'] = 'failed';
-        $output['reason'] = 'db statement failed to execute'
+        $output['reason'] = 'db statement failed to execute';
     }
 
 

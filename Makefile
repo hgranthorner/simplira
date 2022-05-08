@@ -3,3 +3,9 @@ server:
 
 scratch:
 	php scratch/scratch.php
+
+test:
+	./vendor/bin/phpunit
+
+install:
+	composer install && composer dump-autoload
