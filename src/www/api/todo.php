@@ -22,8 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$statement = $db->prepare('
 	insert into tickets (name, status)
 	values (:name, :status);
-
-	select last_insert_rowid() as id;
 	');
 
 	$statement->bindValue(':name', $name);
@@ -38,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		exit;
 	}
 
-	$id = $results->fetchArray()[0]['id'];
+	$id = $db->lastInsertRowID();
 
 	$url->updateQuery('updated', $id);
 	$url->path = '';
@@ -55,6 +53,8 @@ if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
 
 	$statement->bindValue(':id', $id);
 	$executed = $statement->execute();
+
+	$url = new Url($_SERVER['HTTP_REFERER']);
 
 	if (!$executed) {
     $url->updateQuery('updated', 'failed');
