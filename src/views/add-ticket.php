@@ -7,9 +7,17 @@
 	<div>
 		<label for="status">status: </label>
 		<select name="status">
-			<option value="to_do">to do</option>
-			<option value="in_progress">in progress</option>
-			<option value="complete">complete</option>
+			<?php
+			include("{$_SERVER['DOCUMENT_ROOT']}/../Status.php");
+
+			foreach (Status::$statuses as $statusString) {
+				$status = new Status($statusString);
+
+				echo "<option value={$status->rawString}>"
+					. $status->displayName()
+					. '</option>';
+			}
+			?>
 		</select>
 	</div>
 	<button type="submit">Submit</button>

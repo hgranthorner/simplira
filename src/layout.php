@@ -18,10 +18,25 @@
       e.preventDefault()
       const res = await fetch(`/api/todo.php?id=${id}`, {
         method: 'DELETE'
-      });
-      location.reload();
+      })
+      location.reload()
     })
   }
+
+  const toggleButton = document.getElementById('toggle-done-tickets')
+  toggleButton?.addEventListener('click', e => {
+    e.preventDefault()
+    const forms = Array.from(document.querySelectorAll('[data-status="done"]'))
+
+    for (let form of forms) {
+      const display = form.style.display
+      if (display === 'none') {
+        form.style.display = ''
+      } else {
+        form.style.display = 'none'
+      }
+    }
+  })
 </script>
 
 </html>

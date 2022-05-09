@@ -3,6 +3,7 @@
 declare(strict_types=1);
 include("{$_SERVER['DOCUMENT_ROOT']}/../Status.php");
 include("{$_SERVER['DOCUMENT_ROOT']}/../Url.php");
+include("{$_SERVER['DOCUMENT_ROOT']}/../constants.php");
 
 $db = new SQLite3("{$_SERVER['DOCUMENT_ROOT']}/../../database.db");
 
@@ -47,8 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
 	$id = $_REQUEST['id'];
 
 	$statement = $db->prepare('
-	delete from tickets
-	where id = :id
+		update tickets
+			set deleted_at = strftime(\'' . STRFTIME_FORMAT . '\', datetime())
+		where id = :id
 	');
 
 	$statement->bindValue(':id', $id);
