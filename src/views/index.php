@@ -41,7 +41,7 @@ while ($row = $results->fetchArray()) {
     }
   };
   echo
-  "<form action=\"/api/todos.php?id=$id\" 
+  "<form action=\"/api/todo.php?id=$id\" 
     method=\"POST\" 
     data-status=\"$ticketStatus\"
     style=\"$style\"
