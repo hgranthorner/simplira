@@ -8,6 +8,7 @@ include("{$_SERVER['DOCUMENT_ROOT']}/../constants.php");
 $db = new SQLite3("{$_SERVER['DOCUMENT_ROOT']}/../../database.db");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	// If $_REQUEST['id'] exists, then it's an update request.
 	if ($_REQUEST['id']) {
 		$statement = $db->prepare('
 		update tickets
