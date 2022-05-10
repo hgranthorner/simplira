@@ -13,7 +13,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		$statement = $db->prepare('
 		update tickets
 		set name = :name,
-		  status = :status
+		  status = :status,
+		  updated_at = strftime(\'' . STRFTIME_FORMAT . '\', datetime())
 		where id = :id
 		');
 
@@ -62,8 +63,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		}
 
 		$statement = $db->prepare('
-		insert into tickets (name, status)
-		values (:name, :status);
+		insert into tickets (name, status, created_at, updated_at)
+		values (:name, 
+			:status, 
+			strftime(\'' . STRFTIME_FORMAT . '\', datetime()),
+			strftime(\'' . STRFTIME_FORMAT . '\', datetime())
+		);
 		');
 
 		$statement->bindValue(':name', $name);
