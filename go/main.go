@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"html/template"
+	"io/ioutil"
 	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -34,14 +35,21 @@ func GetTickets() (Ticket, error) {
 }
 
 func main() {
-	tmpl, err := template.New("foo").Parse("<h1>Hello {{.}}</h1>")
+	buf, err := ioutil.ReadFile("index.go.html")
 	if err != nil {
 		fmt.Printf("%s", err)
 		return
 	}
 
+	tmpl, err := template.New("foo").Parse(string(buf))
+	if err != nil {
+		fmt.Printf("%s", err)
+		return
+	}
+
+	m := map[string]string {"Name1": "egg", "Name2": "Salad"}
 	out := strings.Builder{}
-	err = tmpl.Execute(&out, "world")
+	err = tmpl.Execute(&out, m)
 	if err != nil {
 		fmt.Printf("%s", err)
 		return
