@@ -20,5 +20,20 @@
 			?>
 		</select>
 	</div>
+		<div>
+		<label for="priority">priority: </label>
+		<select name="priority">
+			<?php
+			include("{$_SERVER['DOCUMENT_ROOT']}/../constants.php");
+
+			foreach (Priority::cases() as $priority) {
+
+				echo "<option value={$priority->value}>"
+					. $priority->toString()
+					. '</option>';
+			}
+			?>
+		</select>
+	</div>
 	<button type="submit">Submit</button>
 </form>
