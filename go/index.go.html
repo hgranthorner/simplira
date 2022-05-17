@@ -1,3 +1,120 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-  <h1>Hello {{.Name1}} and {{.Name2}}</h1>
+
+<head>
+  <title>
+    Home
+  </title>
+  <script>
+    0
+  </script>
+</head>
+
+<h1>Simplira</h1>
+
+<!-- <form action="/api/todo.php" method="POST">
+  <div>
+    <label for="name">name: </label>
+    <input name="name" type="text" />
+  </div>
+  <div>
+    <label for="status">status: </label>
+    <select name="status">
+      {{range $status := $.Statuses}}
+      <option 
+        value="{{.Value}}" 
+      >
+        {{.DisplayName}}
+      </option>
+      {{end}}
+    </select>
+  </div>
+    <div>
+    <label for="priority">priority: </label>
+    <select name="priority">
+      {{range $priority := $.Priorities}}
+      <option 
+        value="{{.Value}}" 
+      >
+        {{.DisplayName}}
+      </option>
+      {{end}}
+    </select>
+  </div>
+  <button type="submit">Submit</button>
+</form> -->
+
+<h2>Tickets</h2>
+<a href="/add-ticket.php">Add ticket</a>
+<button id="toggle-done-tickets">Toggle Done Tickets</button>
+{{range $ticket := .Tickets}}
+<form
+  action="/api/todo" 
+  method="POST"
+  data-status="{{.Status}}"
+>
+  <div>
+    <label for="name">name: </label>
+    <input name="name" type="text" value="{{$ticket.Name}}"/>
+  </div>
+  <div>
+    <label for="status">status: </label>
+    <select name="status">
+      {{range $status := $.Statuses}}
+      <option 
+        value="{{.Value}}"
+        {{if eq $status.Value $ticket.Status}}selected{{end}}
+      >
+        {{.DisplayName}}
+      </option>
+      {{end}}
+    </select>
+  </div>
+  <div>
+    <label for="priority">priority: </label>
+    <select name="priority">
+      {{range $priority := $.Priorities}}
+      <option 
+        value="{{.Value}}" 
+        {{if eq $priority.Value $ticket.Priority}}selected{{end}}
+      >
+        {{.DisplayName}}
+      </option>
+      {{end}}
+    </select>
+  </div>
+  <button type="submit">Submit</button>
+</form>
+{{end}}
+
+<body>
+  <script type="application/javascript">
+    const buttons = Array.from(document.querySelectorAll('.delete-btn'))
+    for (let button of buttons) {
+      const id = button.getAttribute('data-id')
+      button.addEventListener('click', async (e) => {
+        e.preventDefault()
+        const res = await fetch(`/api/todo.php?id=${id}`, {
+          method: 'DELETE'
+        })
+        location.reload()
+      })
+    }
+
+    const toggleButton = document.getElementById('toggle-done-tickets')
+    toggleButton?.addEventListener('click', e => {
+      e.preventDefault()
+      const forms = Array.from(document.querySelectorAll('[data-status="done"]'))
+
+      for (let form of forms) {
+        const display = form.style.display
+        if (display === 'none') {
+          form.style.display = ''
+        } else {
+          form.style.display = 'none'
+        }
+      }
+    })
+  </script>
+</body>
+
 </html>
